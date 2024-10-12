@@ -1,10 +1,13 @@
 import torch
-from transformers import pipeline, AutoTokenizer, AutoModelForSeq2SeqLM
+import os
 
 class FluxPromptEnhanceNode:
     def __init__(self):
+        from transformers import pipeline, AutoTokenizer, AutoModelForSeq2SeqLM
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.model_checkpoint = "gokaygokay/Flux-Prompt-Enhance"
+        if os.path.exists("/stable-diffusion-cache/models/Flux-Prompt-Enhance"):
+            self.model_checkpoint = "/stable-diffusion-cache/models/Flux-Prompt-Enhance"
         self.tokenizer = AutoTokenizer.from_pretrained(self.model_checkpoint)
         self.model = AutoModelForSeq2SeqLM.from_pretrained(self.model_checkpoint)
         self.enhancer = pipeline('text2text-generation',
